@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Journal — Second Skin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="page-hero">
+    <span class="eyebrow">The Journal</span>
+    <h1 class="display" style="margin-top:14px;">Notes on leather,<br>fit, and longevity.</h1>
+    <p>Care guides, fit advice, and the stories behind the hides.</p>
+  </section>
+
+  <section class="section">
+    <!-- Featured -->
+    <a class="editorial reveal" href="#" style="margin-bottom:60px;">
+      <div class="editorial-media"><img src="https://images.unsplash.com/photo-1559551409-dadc959f76b8?auto=format&fit=crop&w=1100&q=80" alt="Breaking in a leather jacket"></div>
+      <div>
+        <span class="eyebrow">Care · 6 min read</span>
+        <h2 class="h2" style="margin:14px 0 18px;">How to break in a leather jacket — and why you shouldn't rush it.</h2>
+        <p class="muted" style="margin-bottom:22px;">The patina is the point. A guide to the first hundred wears, and how great leather earns its character.</p>
+        <span class="link-underline">Read Article →</span>
+      </div>
+    </a>
+
+    <div class="grid" id="journal-grid"></div>
+  </section>
+
+  <section class="section capture">
+    <h2 class="h2 reveal">Read first, wear forever.</h2>
+    <p class="reveal">New guides and drops, straight to your inbox. Plus 10% off your first jacket.</p>
+    <form class="reveal" onsubmit="event.preventDefault(); this.reset(); showToast('Subscribed — check your inbox for 10% off.');">
+      <input type="email" placeholder="Email address" required aria-label="Email address">
+      <button type="submit">Join</button>
+    </form>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const posts = [
+      { t:"Biker vs. Café Racer: which jacket is actually you?", c:"Style · 4 min", img:"https://images.unsplash.com/photo-1604644401890-0bd678c83788?auto=format&fit=crop&w=700&q=80" },
+      { t:"Full-grain, top-grain, genuine: a leather grading cheat sheet.", c:"Craft · 5 min", img:"https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=700&q=80" },
+      { t:"How to store leather through summer without ruining it.", c:"Care · 3 min", img:"https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=700&q=80" },
+      { t:"The five-piece capsule, built around one black jacket.", c:"Style · 6 min", img:"https://images.unsplash.com/photo-1485218126466-34e6392ec754?auto=format&fit=crop&w=700&q=80" },
+      { t:"Why vegetable tanning takes weeks (and why we wait).", c:"Craft · 7 min", img:"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=700&q=80" },
+      { t:"Caught in the rain? Do this within the first hour.", c:"Care · 2 min", img:"https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=80" }
+    ];
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("journal-grid").innerHTML = posts.map(p => `
+        <a class="product-card reveal" href="#">
+          <div class="pc-media"><img class="main" src="${p.img}" alt="${p.t}" loading="lazy"></div>
+          <div class="pc-info"><div class="cat">${p.c}</div><h3 style="font-family:var(--serif);font-size:1.15rem;font-weight:400;">${p.t}</h3></div>
+        </a>`).join("");
+      initReveal();
+    });
+  </script>
+</body>
+</html>

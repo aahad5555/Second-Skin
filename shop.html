@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All — Second Skin</title>
+  <meta name="description" content="Shop handcrafted full-grain leather jackets — biker, bomber, café racer, trench, aviator and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="page-hero">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <span id="crumb">Shop All</span></div>
+    <span class="eyebrow">The Collection</span>
+    <h1 class="h2" id="shop-title" style="margin-top:14px;">All Jackets</h1>
+    <p id="shop-sub">Every jacket cut from full-grain leather, built to last decades. Free shipping, returns, and lifetime repair on all orders.</p>
+  </section>
+
+  <div class="filterbar" id="filterbar"></div>
+
+  <section class="section" style="padding-top:50px;">
+    <div class="grid" id="product-grid"></div>
+    <p id="empty-state" style="display:none; text-align:center; color:var(--stone); padding:40px;">No jackets match this filter. <a href="shop.html" class="link-underline">View all →</a></p>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let activeCat = params.get("cat");        // category name
+    let activeFlag = params.get("f");          // "New" | "Bestseller"
+    const categories = ["All", ...new Set(PRODUCTS.map(p => p.category))];
+
+    function applyFilter() {
+      let list = PRODUCTS.slice();
+      if (activeFlag) list = list.filter(p => p.tag === activeFlag);
+      if (activeCat && activeCat !== "All") list = list.filter(p => p.category === activeCat);
+
+      const grid = document.getElementById("product-grid");
+      const empty = document.getElementById("empty-state");
+      grid.innerHTML = list.map(productCardHTML).join("");
+      empty.style.display = list.length ? "none" : "block";
+
+      // titles
+      const title = activeFlag === "New" ? "New Arrivals"
+                  : activeFlag === "Bestseller" ? "Bestsellers"
+                  : activeCat && activeCat !== "All" ? activeCat
+                  : "All Jackets";
+      document.getElementById("shop-title").textContent = title;
+      document.getElementById("crumb").textContent = title;
+
+      document.querySelectorAll("#filterbar button").forEach(b => {
+        b.classList.toggle("active", b.dataset.cat === (activeCat || "All") && !activeFlag);
+      });
+      initReveal();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("filterbar").innerHTML = categories
+        .map(c => `<button data-cat="${c}">${c}</button>`).join("");
+      document.querySelectorAll("#filterbar button").forEach(b => {
+        b.addEventListener("click", () => { activeCat = b.dataset.cat; activeFlag = null; applyFilter(); });
+      });
+      applyFilter();
+    });
+  </script>
+</body>
+</html>

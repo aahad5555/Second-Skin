@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Second Skin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main id="pdp-root"></main>
+
+  <!-- You may also like -->
+  <section class="section" style="padding-top:0;">
+    <div class="section-head reveal"><span class="eyebrow">Complete The Look</span><h2 class="h2">You may also like</h2></div>
+    <div class="rail" id="related-rail"></div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const id = new URLSearchParams(location.search).get("id");
+    const p = getProduct(id) || PRODUCTS[0];
+    let selectedSize = null;
+
+    function renderPDP() {
+      document.title = `${p.name} — Second Skin`;
+      const gallery = p.gallery.map((src,i) => `<img src="${src}" alt="${p.name} view ${i+1}" loading="lazy">`).join("");
+      document.getElementById("pdp-root").innerHTML = `
+      <div class="breadcrumb" style="padding:24px var(--pad) 0;">
+        <a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <a href="shop.html?cat=${encodeURIComponent(p.category)}">${p.category}</a> / <span>${p.name}</span>
+      </div>
+      <div class="pdp">
+        <div class="pdp-gallery">${gallery}</div>
+        <div class="pdp-info">
+          <div class="cat">${p.category} · ${p.color}</div>
+          <h1>${p.name}</h1>
+          <div class="pdp-price">${formatPrice(p.price)}</div>
+          <div class="pdp-rating"><span class="stars">★★★★★</span> &nbsp;${p.rating} · ${p.reviews} reviews</div>
+          <p class="pdp-desc">${p.desc}</p>
+          <p class="model-note">${p.model}</p>
+
+          <div class="opt-label"><span>Select Size</span><a href="#" class="link-underline" style="font-size:11px;" onclick="event.preventDefault(); openFit()">Size Guide / Fit Finder</a></div>
+          <div class="sizes" id="sizes">${SIZES.map(s => `<button onclick="pickSize('${s}',this)">${s}</button>`).join("")}</div>
+
+          <div class="pdp-actions">
+            <button class="btn btn-primary" id="add-btn" onclick="addPDP()">Add to Bag — ${formatPrice(p.price)}</button>
+          </div>
+
+          <div class="pdp-perks">
+            <span>✓ Free worldwide shipping</span>
+            <span>✓ 30-day returns</span>
+            <span>✓ Lifetime repair</span>
+          </div>
+
+          <div class="pdp-accordion">
+            <div class="acc-item">
+              <button class="acc-head" onclick="toggleAcc(this)">Details &amp; Materials <span>+</span></button>
+              <div class="acc-body"><p>100% full-grain ${p.color.toLowerCase()} leather. Cupro lining. YKK Excella hardware. Cut and sewn by a single maker. Imported.</p></div>
+            </div>
+            <div class="acc-item">
+              <button class="acc-head" onclick="toggleAcc(this)">Shipping &amp; Returns <span>+</span></button>
+              <div class="acc-body"><p>Complimentary worldwide shipping in 3–5 business days. Free 30-day returns — try it at home, send it back free if it isn't the one.</p></div>
+            </div>
+            <div class="acc-item">
+              <button class="acc-head" onclick="toggleAcc(this)">Care &amp; Lifetime Repair <span>+</span></button>
+              <div class="acc-body"><p>Wipe with a dry cloth; condition twice a year. Every Second Skin jacket includes free repairs for life — zips, seams, hardware, lining.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function pickSize(s, el) {
+      selectedSize = s;
+      document.querySelectorAll("#sizes button").forEach(b => b.classList.remove("active"));
+      el.classList.add("active");
+    }
+    function addPDP() {
+      if (!selectedSize) { showToast("Please select a size first");
+        document.getElementById("sizes").animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:300});
+        return; }
+      addToCart(p.id, selectedSize, 1);
+    }
+    function toggleAcc(btn) {
+      const body = btn.nextElementSibling;
+      const open = body.classList.toggle("open");
+      btn.querySelector("span").textContent = open ? "−" : "+";
+    }
+    function openFit() { showToast("Fit Finder: connect your quiz app or size-guide modal here."); }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPDP();
+      const related = PRODUCTS.filter(x => x.id !== p.id).slice(0, 5);
+      document.getElementById("related-rail").innerHTML = related.map(productCardHTML).join("");
+      initReveal();
+    });
+  </script>
+</body>
+</html>
