@@ -42,6 +42,7 @@ function headerHTML() {
             </a>
           </div>
         </li>
+        <li><a href="custom.html">Made to Measure</a></li>
         <li><a href="collections.html">Collections</a></li>
         <li><a href="craft.html">Our Craft</a></li>
         <li><a href="journal.html">Journal</a></li>
@@ -60,6 +61,7 @@ function headerHTML() {
     <button class="mobile-close" onclick="toggleMobile()" aria-label="Close">×</button>
     <a href="shop.html">Shop All</a>
     <a href="shop.html?f=New">New Arrivals</a>
+    <a href="custom.html">Made to Measure</a>
     <a href="collections.html">Collections</a>
     <a href="craft.html">Our Craft</a>
     <a href="journal.html">Journal</a>
