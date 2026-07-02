@@ -52,20 +52,23 @@ Or just open `index.html` in a browser (cart still works).
 
 ## Before you launch — checklist
 
-1. **Replace photography.** All images are Unsplash placeholders hot-linked via URL.
-   Swap the `img`/`alt`/`gallery` URLs in `js/products.js` and the hardcoded URLs in the
-   HTML with your own studio + on-body shots (use the AI prompts from the brand doc to
-   generate them). Host them in `/assets`.
+1. **Replace photography with your own.** Current images are Unsplash stock, each one
+   visually verified to show real leather matching its caption — but they are not YOUR
+   jackets. Swap the URLs in `js/products.js` and the HTML with your own studio +
+   on-body shots (shot list below). Host them in `/assets`.
 2. **Connect real checkout.** `checkout()` in `js/cart.js` is a stub. Wire it to one of:
    - **Stripe** — create a Checkout Session / Payment Link and redirect.
    - **Shopify Buy Button / Hydrogen** — recommended; best-in-class checkout for high-ticket.
    - **Snipcart / Foxy** — drop-in cart for static sites.
 3. **Hook up the email forms.** The newsletter forms currently just show a toast.
    Point them at Klaviyo / Mailchimp / Shopify Email.
-4. **Wire the Fit Finder** (`openFit()` in `product.html`) to a real size-quiz or modal.
-5. **Add real content** for Shipping, Returns, Size Guide, Contact, FAQ, Privacy, Terms
-   (currently `#` links in the footer).
-6. **SEO/meta:** add Open Graph tags, a favicon, `sitemap.xml`, and analytics.
+4. **Add real content** for Shipping, Returns, Contact, FAQ, Privacy, Terms
+   (currently `#` links in the footer). Size guide already lives at `custom.html#measure`.
+5. **SEO/meta:** `sitemap.xml` and analytics still to add (OG tags + favicon are done).
+6. **Reviews:** the site intentionally contains NO reviews or ratings — the brand is
+   pre-launch and fabricating social proof would be dishonest (and against Google's
+   structured-data rules). Add a real reviews widget (e.g. Judge.me) once genuine
+   orders exist. Keep it that way.
 
 ## Deploy (static hosting)
 

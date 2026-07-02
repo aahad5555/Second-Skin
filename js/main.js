@@ -4,9 +4,10 @@
 
 const MEGA_FEATURE_IMG = {
   default: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
-  noir:    "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=800&q=80",
-  tan:     "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
-  minimal: "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&w=800&q=80"
+  noir:    "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&w=800&q=80",
+  tan:     "https://images.unsplash.com/photo-1623854156816-4c4fc355ffc7?auto=format&fit=crop&w=800&q=80",
+  shearling: "https://images.unsplash.com/photo-1700168077358-692db90c8b7f?auto=format&fit=crop&w=800&q=80",
+  womens:  "https://images.unsplash.com/photo-1602370463198-086436840055?auto=format&fit=crop&w=800&q=80"
 };
 
 function headerHTML() {
@@ -22,23 +23,22 @@ function headerHTML() {
             <div>
               <h4>Shop</h4>
               <ul>
-                <li><a href="shop.html?f=New">New Arrivals</a></li>
-                <li><a href="shop.html">Shop All</a></li>
-                <li><a href="shop.html?f=Bestseller">Bestsellers</a></li>
+                <li><a href="shop.html">The Founding Five</a></li>
+                <li><a href="custom.html">Made to Measure</a></li>
               </ul>
             </div>
             <div>
-              <h4>Iconic Styles</h4>
+              <h4>The Styles</h4>
               <ul>
                 <li><a href="shop.html?cat=Biker" data-feat="noir">Biker</a></li>
-                <li><a href="shop.html?cat=Bomber" data-feat="minimal">Bomber</a></li>
                 <li><a href="shop.html?cat=Café Racer" data-feat="tan">Café Racer</a></li>
-                <li><a href="shop.html?cat=Trench" data-feat="noir">Trench</a></li>
-                <li><a href="shop.html?cat=Aviator" data-feat="tan">Aviator</a></li>
+                <li><a href="shop.html?cat=Classic" data-feat="tan">Classic</a></li>
+                <li><a href="shop.html?cat=Aviator" data-feat="shearling">Aviator</a></li>
+                <li><a href="shop.html?cat=Women's" data-feat="womens">Women's</a></li>
               </ul>
             </div>
-            <a class="mega-feature" id="mega-feature" href="shop.html?f=New" style="background-image:url('${MEGA_FEATURE_IMG.default}')">
-              <div class="cap"><p>New Arrivals →</p></div>
+            <a class="mega-feature" id="mega-feature" href="shop.html" style="background-image:url('${MEGA_FEATURE_IMG.default}')">
+              <div class="cap"><p>The Founding Five →</p></div>
             </a>
           </div>
         </li>
@@ -59,8 +59,7 @@ function headerHTML() {
 
   <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-close" onclick="toggleMobile()" aria-label="Close">×</button>
-    <a href="shop.html">Shop All</a>
-    <a href="shop.html?f=New">New Arrivals</a>
+    <a href="shop.html">Shop The Founding Five</a>
     <a href="custom.html">Made to Measure</a>
     <a href="collections.html">Collections</a>
     <a href="craft.html">Our Craft</a>
@@ -93,10 +92,10 @@ function footerHTML() {
       <div>
         <h4>Shop</h4>
         <ul>
-          <li><a href="shop.html?f=New">New Arrivals</a></li>
+          <li><a href="shop.html">The Founding Five</a></li>
           <li><a href="shop.html?cat=Biker">Biker</a></li>
-          <li><a href="shop.html?cat=Bomber">Bomber</a></li>
-          <li><a href="shop.html">Shop All</a></li>
+          <li><a href="shop.html?cat=Women's">Women's</a></li>
+          <li><a href="custom.html">Made to Measure</a></li>
         </ul>
       </div>
       <div>

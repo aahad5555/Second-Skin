@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product — Second Skin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A0A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23C9B79C' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,11 +44,11 @@
           <div class="cat">${p.category} · ${p.color}</div>
           <h1>${p.name}</h1>
           <div class="pdp-price">${formatPrice(p.price)}</div>
-          <div class="pdp-rating"><span class="stars">★★★★★</span> &nbsp;${p.rating} · ${p.reviews} reviews</div>
+          <div class="pdp-rating">Full-grain leather · Handcrafted in Sialkot · Part of the Founding Five</div>
           <p class="pdp-desc">${p.desc}</p>
           <p class="model-note">${p.model}</p>
 
-          <div class="opt-label"><span>Select Size</span><a href="#" class="link-underline" style="font-size:11px;" onclick="event.preventDefault(); openFit()">Size Guide / Fit Finder</a></div>
+          <div class="opt-label"><span>Select Size</span><a href="custom.html#measure" class="link-underline" style="font-size:11px;">Size Guide &amp; How To Measure</a></div>
           <div class="sizes" id="sizes">${SIZES.map(s => `<button onclick="pickSize('${s}',this)">${s}</button>`).join("")}</div>
 
           <div class="pdp-actions">
@@ -94,7 +95,6 @@
       const open = body.classList.toggle("open");
       btn.querySelector("span").textContent = open ? "−" : "+";
     }
-    function openFit() { showToast("Fit Finder: connect your quiz app or size-guide modal here."); }
 
     document.addEventListener("DOMContentLoaded", () => {
       renderPDP();

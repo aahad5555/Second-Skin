@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop All — Second Skin</title>
-  <meta name="description" content="Shop handcrafted full-grain leather jackets — biker, bomber, café racer, trench, aviator and more.">
+  <meta name="description" content="Shop The Founding Five — handcrafted full-grain leather jackets: biker, café racer, classic, aviator shearling and women's moto.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A0A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23C9B79C' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,9 +16,9 @@
 
   <section class="page-hero">
     <div class="breadcrumb"><a href="index.html">Home</a> / <span id="crumb">Shop All</span></div>
-    <span class="eyebrow">The Collection</span>
-    <h1 class="h2" id="shop-title" style="margin-top:14px;">All Jackets</h1>
-    <p id="shop-sub">Every jacket cut from full-grain leather, built to last decades. Free shipping, returns, and lifetime repair on all orders.</p>
+    <span class="eyebrow">The Launch Capsule</span>
+    <h1 class="h2" id="shop-title" style="margin-top:14px;">The Founding Five</h1>
+    <p id="shop-sub">Five silhouettes, every one cut from full-grain leather and built to last decades. Free shipping, 30-day returns, and lifetime repair on every order — or <a href="custom.html" class="link-underline">have one made to your measurements</a>.</p>
   </section>
 
   <div class="filterbar" id="filterbar"></div>
@@ -35,12 +36,10 @@
   <script>
     const params = new URLSearchParams(location.search);
     let activeCat = params.get("cat");        // category name
-    let activeFlag = params.get("f");          // "New" | "Bestseller"
     const categories = ["All", ...new Set(PRODUCTS.map(p => p.category))];
 
     function applyFilter() {
       let list = PRODUCTS.slice();
-      if (activeFlag) list = list.filter(p => p.tag === activeFlag);
       if (activeCat && activeCat !== "All") list = list.filter(p => p.category === activeCat);
 
       const grid = document.getElementById("product-grid");
@@ -49,15 +48,12 @@
       empty.style.display = list.length ? "none" : "block";
 
       // titles
-      const title = activeFlag === "New" ? "New Arrivals"
-                  : activeFlag === "Bestseller" ? "Bestsellers"
-                  : activeCat && activeCat !== "All" ? activeCat
-                  : "All Jackets";
+      const title = activeCat && activeCat !== "All" ? activeCat : "The Founding Five";
       document.getElementById("shop-title").textContent = title;
       document.getElementById("crumb").textContent = title;
 
       document.querySelectorAll("#filterbar button").forEach(b => {
-        b.classList.toggle("active", b.dataset.cat === (activeCat || "All") && !activeFlag);
+        b.classList.toggle("active", b.dataset.cat === (activeCat || "All"));
       });
       initReveal();
     }
@@ -66,7 +62,7 @@
       document.getElementById("filterbar").innerHTML = categories
         .map(c => `<button data-cat="${c}">${c}</button>`).join("");
       document.querySelectorAll("#filterbar button").forEach(b => {
-        b.addEventListener("click", () => { activeCat = b.dataset.cat; activeFlag = null; applyFilter(); });
+        b.addEventListener("click", () => { activeCat = b.dataset.cat; applyFilter(); });
       });
       applyFilter();
     });
