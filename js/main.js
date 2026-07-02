@@ -12,7 +12,7 @@ const MEGA_FEATURE_IMG = {
 
 function headerHTML() {
   return `
-  <div class="announce">Complimentary shipping &amp; returns worldwide · Lifetime leather repair</div>
+  <div class="announce">Complimentary worldwide shipping · Handcrafted in Sialkot</div>
   <header class="header">
     <nav class="nav">
       <a href="index.html" class="brand">SECOND SKIN</a>
@@ -23,7 +23,9 @@ function headerHTML() {
             <div>
               <h4>Shop</h4>
               <ul>
-                <li><a href="shop.html">The Founding Five</a></li>
+                <li><a href="shop.html">The Collection</a></li>
+                <li><a href="shop.html?g=Men" data-feat="noir">Men</a></li>
+                <li><a href="shop.html?g=Women" data-feat="womens">Women</a></li>
                 <li><a href="custom.html">Made to Measure</a></li>
               </ul>
             </div>
@@ -31,14 +33,15 @@ function headerHTML() {
               <h4>The Styles</h4>
               <ul>
                 <li><a href="shop.html?cat=Biker" data-feat="noir">Biker</a></li>
+                <li><a href="shop.html?cat=Moto" data-feat="womens">Moto</a></li>
                 <li><a href="shop.html?cat=Café Racer" data-feat="tan">Café Racer</a></li>
                 <li><a href="shop.html?cat=Classic" data-feat="tan">Classic</a></li>
-                <li><a href="shop.html?cat=Aviator" data-feat="shearling">Aviator</a></li>
-                <li><a href="shop.html?cat=Women's" data-feat="womens">Women's</a></li>
+                <li><a href="shop.html?cat=Shearling" data-feat="shearling">Shearling</a></li>
+                <li><a href="shop.html?cat=Suede" data-feat="tan">Suede</a></li>
               </ul>
             </div>
             <a class="mega-feature" id="mega-feature" href="shop.html" style="background-image:url('${MEGA_FEATURE_IMG.default}')">
-              <div class="cap"><p>The Founding Five →</p></div>
+              <div class="cap"><p>Shop Ready-To-Wear →</p></div>
             </a>
           </div>
         </li>
@@ -59,7 +62,9 @@ function headerHTML() {
 
   <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-close" onclick="toggleMobile()" aria-label="Close">×</button>
-    <a href="shop.html">Shop The Founding Five</a>
+    <a href="shop.html">Shop The Collection</a>
+    <a href="shop.html?g=Men">Men</a>
+    <a href="shop.html?g=Women">Women</a>
     <a href="custom.html">Made to Measure</a>
     <a href="collections.html">Collections</a>
     <a href="craft.html">Our Craft</a>
@@ -80,7 +85,7 @@ function drawerHTML() {
       <div class="row"><span>Subtotal</span><span class="total" id="drawer-subtotal">$0</span></div>
       <div class="row muted" style="color:var(--stone);font-size:13px;"><span>Shipping</span><span>Free</span></div>
       <button class="btn btn-primary" onclick="checkout()">Checkout</button>
-      <p class="ship-note">Free worldwide shipping · 30-day returns · Lifetime repair</p>
+      <p class="ship-note">Free worldwide shipping · Handcrafted in Sialkot</p>
     </div>
   </aside>`;
 }
@@ -92,9 +97,9 @@ function footerHTML() {
       <div>
         <h4>Shop</h4>
         <ul>
-          <li><a href="shop.html">The Founding Five</a></li>
-          <li><a href="shop.html?cat=Biker">Biker</a></li>
-          <li><a href="shop.html?cat=Women's">Women's</a></li>
+          <li><a href="shop.html?g=Men">Men</a></li>
+          <li><a href="shop.html?g=Women">Women</a></li>
+          <li><a href="shop.html">The Collection</a></li>
           <li><a href="custom.html">Made to Measure</a></li>
         </ul>
       </div>
@@ -103,16 +108,16 @@ function footerHTML() {
         <ul>
           <li><a href="craft.html">The Leather</a></li>
           <li><a href="craft.html">How It's Made</a></li>
-          <li><a href="craft.html">Lifetime Care</a></li>
+          <li><a href="craft.html">Leather Care</a></li>
         </ul>
       </div>
       <div>
         <h4>Help</h4>
         <ul>
-          <li><a href="#">Shipping &amp; Returns</a></li>
-          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="custom.html#measure">Size Guide</a></li>
           <li><a href="#">Contact</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="custom.html#faq">FAQ</a></li>
         </ul>
       </div>
       <div>

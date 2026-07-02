@@ -44,7 +44,7 @@
           <div class="cat">${p.category} · ${p.color}</div>
           <h1>${p.name}</h1>
           <div class="pdp-price">${formatPrice(p.price)}</div>
-          <div class="pdp-rating">Full-grain leather · Handcrafted in Sialkot · Part of the Founding Five</div>
+          <div class="pdp-rating">Genuine leather · Handcrafted in Sialkot · Ready-to-wear</div>
           <p class="pdp-desc">${p.desc}</p>
           <p class="model-note">${p.model}</p>
 
@@ -57,8 +57,8 @@
 
           <div class="pdp-perks">
             <span>✓ Free worldwide shipping</span>
-            <span>✓ 30-day returns</span>
-            <span>✓ Lifetime repair</span>
+            <span>✓ Genuine full-grain leather</span>
+            <span>✓ Handcrafted in Sialkot</span>
           </div>
 
           <div class="pdp-accordion">
@@ -67,12 +67,12 @@
               <div class="acc-body"><p>100% full-grain ${p.color.toLowerCase()} leather. Cupro lining. YKK Excella hardware. Cut and sewn by a single maker. Imported.</p></div>
             </div>
             <div class="acc-item">
-              <button class="acc-head" onclick="toggleAcc(this)">Shipping &amp; Returns <span>+</span></button>
-              <div class="acc-body"><p>Complimentary worldwide shipping in 3–5 business days. Free 30-day returns — try it at home, send it back free if it isn't the one.</p></div>
+              <button class="acc-head" onclick="toggleAcc(this)">Shipping <span>+</span></button>
+              <div class="acc-body"><p>Complimentary tracked worldwide shipping in 3–5 business days. Questions about your order? Contact us any time — we answer within one business day.</p></div>
             </div>
             <div class="acc-item">
-              <button class="acc-head" onclick="toggleAcc(this)">Care &amp; Lifetime Repair <span>+</span></button>
-              <div class="acc-body"><p>Wipe with a dry cloth; condition twice a year. Every Second Skin jacket includes free repairs for life — zips, seams, hardware, lining.</p></div>
+              <button class="acc-head" onclick="toggleAcc(this)">Leather Care <span>+</span></button>
+              <div class="acc-body"><p>Wipe with a dry cloth and condition twice a year. Keep it off direct radiators, hang it on a wide hanger, and let rain dry naturally — full-grain leather rewards patience.</p></div>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       renderPDP();
-      const related = PRODUCTS.filter(x => x.id !== p.id).slice(0, 5);
+      const related = PRODUCTS.filter(x => x.id !== p.id && x.gender === p.gender).slice(0, 5);
       document.getElementById("related-rail").innerHTML = related.map(productCardHTML).join("");
       initReveal();
     });
