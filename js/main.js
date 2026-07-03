@@ -7,7 +7,9 @@ const MEGA_FEATURE_IMG = {
   noir:    "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&w=800&q=80",
   tan:     "https://images.unsplash.com/photo-1623854156816-4c4fc355ffc7?auto=format&fit=crop&w=800&q=80",
   shearling: "https://images.unsplash.com/photo-1700168077358-692db90c8b7f?auto=format&fit=crop&w=800&q=80",
-  womens:  "https://images.unsplash.com/photo-1602370463198-086436840055?auto=format&fit=crop&w=800&q=80"
+  womens:  "https://images.unsplash.com/photo-1602370463198-086436840055?auto=format&fit=crop&w=800&q=80",
+  kids:    "https://images.unsplash.com/photo-1648009847493-db3a2f961bce?auto=format&fit=crop&w=800&q=80",
+  accessories: "https://images.unsplash.com/photo-1637868796504-32f45a96d5a0?auto=format&fit=crop&w=800&q=80"
 };
 
 function headerHTML() {
@@ -23,9 +25,10 @@ function headerHTML() {
             <div>
               <h4>Shop</h4>
               <ul>
-                <li><a href="shop.html">The Collection</a></li>
                 <li><a href="shop.html?g=Men" data-feat="noir">Men</a></li>
                 <li><a href="shop.html?g=Women" data-feat="womens">Women</a></li>
+                <li><a href="shop.html?g=Kids" data-feat="kids">Kids</a></li>
+                <li><a href="shop.html?g=Accessories" data-feat="accessories">Accessories</a></li>
                 <li><a href="custom.html">Made to Measure</a></li>
               </ul>
             </div>
@@ -35,9 +38,9 @@ function headerHTML() {
                 <li><a href="shop.html?cat=Biker" data-feat="noir">Biker</a></li>
                 <li><a href="shop.html?cat=Moto" data-feat="womens">Moto</a></li>
                 <li><a href="shop.html?cat=Café Racer" data-feat="tan">Café Racer</a></li>
-                <li><a href="shop.html?cat=Classic" data-feat="tan">Classic</a></li>
                 <li><a href="shop.html?cat=Shearling" data-feat="shearling">Shearling</a></li>
-                <li><a href="shop.html?cat=Suede" data-feat="tan">Suede</a></li>
+                <li><a href="shop.html?cat=Bags" data-feat="accessories">Bags</a></li>
+                <li><a href="shop.html?cat=Wallets" data-feat="accessories">Wallets</a></li>
               </ul>
             </div>
             <a class="mega-feature" id="mega-feature" href="shop.html" style="background-image:url('${MEGA_FEATURE_IMG.default}')">
@@ -62,9 +65,10 @@ function headerHTML() {
 
   <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-close" onclick="toggleMobile()" aria-label="Close">×</button>
-    <a href="shop.html">Shop The Collection</a>
     <a href="shop.html?g=Men">Men</a>
     <a href="shop.html?g=Women">Women</a>
+    <a href="shop.html?g=Kids">Kids</a>
+    <a href="shop.html?g=Accessories">Accessories</a>
     <a href="custom.html">Made to Measure</a>
     <a href="collections.html">Collections</a>
     <a href="craft.html">Our Craft</a>
@@ -99,7 +103,8 @@ function footerHTML() {
         <ul>
           <li><a href="shop.html?g=Men">Men</a></li>
           <li><a href="shop.html?g=Women">Women</a></li>
-          <li><a href="shop.html">The Collection</a></li>
+          <li><a href="shop.html?g=Kids">Kids</a></li>
+          <li><a href="shop.html?g=Accessories">Accessories</a></li>
           <li><a href="custom.html">Made to Measure</a></li>
         </ul>
       </div>
@@ -165,7 +170,9 @@ function productCardHTML(p) {
 
 function quickAdd(id) {
   const p = getProduct(id);
-  addToCart(id, "M", 1); // quick-add defaults to M; PDP offers full size choice
+  if (!p) return;
+  const s = sizesFor(p);
+  addToCart(id, s[Math.floor((s.length - 1) / 2)], 1); // sensible middle size; PDP offers full choice
 }
 
 /* ---------- Reveal on scroll ---------- */

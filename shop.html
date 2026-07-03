@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop All — Second Skin</title>
-  <meta name="description" content="Shop ready-to-wear leather jackets for men and women — biker, moto, café racer, classic, shearling, suede and western. Handcrafted, genuine leather.">
+  <meta name="description" content="Shop genuine leather for men, women and kids — biker, moto, café racer, classic, shearling and suede jackets — plus wallets, belts, bags and gloves.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A0A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23C9B79C' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
     <div class="breadcrumb"><a href="index.html">Home</a> / <span id="crumb">Shop All</span></div>
     <span class="eyebrow">Ready-To-Wear</span>
     <h1 class="h2" id="shop-title" style="margin-top:14px;">The Collection</h1>
-    <p id="shop-sub">Twenty designs for men and women, every one cut from genuine leather and built to last decades. Free worldwide shipping — or <a href="custom.html" class="link-underline">have one made to your measurements</a>.</p>
+    <p id="shop-sub">Jackets for men, women and kids — plus leather accessories — every piece cut from genuine leather and built to last. Free worldwide shipping — or <a href="custom.html" class="link-underline">have a jacket made to your measurements</a>.</p>
   </section>
 
   <div class="filterbar" id="filterbar"></div>
@@ -35,18 +35,19 @@
   <script src="js/main.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
-    let activeCat = params.get("cat") || "All";     // style category
-    let activeGender = params.get("g") || "All";    // All | Men | Women
-    const genders = ["All", "Men", "Women"];
+    let activeCat = params.get("cat") || "All";        // style category
+    let activeSection = params.get("g") || "All";      // All | Men | Women | Kids | Accessories
+    const sections = ["All", "Men", "Women", "Kids", "Accessories"];
+    if (!sections.includes(activeSection)) activeSection = "All";
 
     function visibleCategories() {
-      const pool = activeGender === "All" ? PRODUCTS : PRODUCTS.filter(p => p.gender === activeGender);
+      const pool = activeSection === "All" ? PRODUCTS : PRODUCTS.filter(p => p.section === activeSection);
       return ["All", ...new Set(pool.map(p => p.category))];
     }
 
     function applyFilter() {
       let list = PRODUCTS.slice();
-      if (activeGender !== "All") list = list.filter(p => p.gender === activeGender);
+      if (activeSection !== "All") list = list.filter(p => p.section === activeSection);
       if (activeCat !== "All") list = list.filter(p => p.category === activeCat);
 
       const grid = document.getElementById("product-grid");
@@ -54,8 +55,8 @@
       grid.innerHTML = list.map(productCardHTML).join("");
       empty.style.display = list.length ? "none" : "block";
 
-      const title = (activeGender !== "All" ? activeGender + " — " : "") +
-                    (activeCat !== "All" ? activeCat : "The Collection");
+      const title = (activeSection !== "All" ? activeSection + " — " : "") +
+                    (activeCat !== "All" ? activeCat : (activeSection !== "All" ? "All" : "The Collection"));
       document.getElementById("shop-title").textContent = title;
       document.getElementById("crumb").textContent = title;
       renderFilters();
@@ -65,12 +66,12 @@
     function renderFilters() {
       const bar = document.getElementById("filterbar");
       bar.innerHTML =
-        genders.map(g => `<button data-g="${g}" class="${g === activeGender ? "active" : ""}">${g === "All" ? "Everyone" : g}</button>`).join("") +
+        sections.map(s => `<button data-g="${s}" class="${s === activeSection ? "active" : ""}">${s === "All" ? "Everything" : s}</button>`).join("") +
         `<span style="width:1px;background:var(--line);margin:0 8px;"></span>` +
         visibleCategories().map(c => `<button data-cat="${c}" class="${c === activeCat ? "active" : ""}">${c === "All" ? "All Styles" : c}</button>`).join("");
       bar.querySelectorAll("button[data-g]").forEach(b =>
         b.addEventListener("click", () => {
-          activeGender = b.dataset.g;
+          activeSection = b.dataset.g;
           if (!visibleCategories().includes(activeCat)) activeCat = "All";
           applyFilter();
         }));

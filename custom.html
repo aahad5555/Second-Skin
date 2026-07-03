@@ -220,9 +220,11 @@
   .tips li::before{content:"✓";position:absolute;left:0;color:var(--brass);font-weight:700}
 
   /* Unit toggle */
-  .unit-toggle{display:inline-flex;border:1px solid var(--brass);border-radius:30px;overflow:hidden;margin-left:auto}
-  .unit-toggle button{padding:7px 18px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--tan)}
-  .unit-toggle button.active{background:var(--brass);color:#1A1512}
+  .unit-toggle,.gender-toggle{display:inline-flex;border:1px solid var(--brass);border-radius:30px;overflow:hidden}
+  .unit-toggle{margin-left:auto}
+  .unit-toggle button,.gender-toggle button{padding:7px 18px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--tan)}
+  .unit-toggle button.active,.gender-toggle button.active{background:var(--brass);color:#1A1512}
+  .gender-toggle button{padding:10px 22px}
   .toggle-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:26px}
 
   /* Size chart */
@@ -369,7 +371,7 @@
   <div class="section-head reveal">
     <span class="eyebrow">Choose Your Silhouette</span>
     <h2 class="h2">Five icons. One made for you.</h2>
-    <p>Every style below is made to your measurements in the leather, color and lining you choose. Browse the cuts, then design yours below.</p>
+    <p>Every style below is made to your measurements — for men, women and kids — in the leather, color and lining you choose. Browse the cuts, then design yours below.</p>
   </div>
   <div class="gallery">
     <!-- ART DIRECTION: replace each with your own studio shot of that style, full length, plain warm background. -->
@@ -449,7 +451,9 @@
   </div>
 
   <div class="toggle-row">
-    <span class="muted" style="font-size:13px">Show measurements in:</span>
+    <span class="muted" style="font-size:13px">Sizing for:</span>
+    <div class="gender-toggle gender-pills" role="group" aria-label="Who is the jacket for"></div>
+    <span class="muted" style="font-size:13px;margin-left:18px">Show measurements in:</span>
     <div class="unit-toggle" role="group" aria-label="Unit toggle">
       <button type="button" id="u-in" class="active" onclick="setUnit('in')">Inches</button>
       <button type="button" id="u-cm" onclick="setUnit('cm')">Centimetres</button>
@@ -523,6 +527,7 @@
           <li>Have someone help, especially with shoulders and back length.</li>
           <li>Stand naturally — relaxed shoulders, arms down, normal breathing.</li>
           <li>Measure twice. If the two differ, measure a third time and trust the middle.</li>
+          <li>Ordering for a growing kid? Add one inch to chest and length for growing room.</li>
         </ul>
       </div>
     </div>
@@ -531,16 +536,16 @@
   <!-- SIZE CHART FALLBACK -->
   <div class="reveal" style="margin-top:56px">
     <h3 class="h3" style="margin-bottom:8px">Not sure? Start from a standard size.</h3>
-    <p class="muted" style="margin-bottom:22px;max-width:640px">Pick the closest size below as a starting point — then tweak any number in the form. Values follow the unit you selected above.</p>
+    <p class="muted" style="margin-bottom:22px;max-width:640px">Showing the <b id="chart-gender-word">men's</b> chart — switch with the "Sizing for" toggle above. Pick the closest size as a starting point, then tweak any number in the form. Values follow your chosen unit.</p>
     <div class="chart-wrap">
       <table id="size-chart">
         <thead>
-          <tr><th>Size</th><th>Chest</th><th>Shoulder</th><th>Sleeve</th><th>Length</th><th>Waist</th><th></th></tr>
+          <tr><th id="chart-size-th">Size</th><th>Chest</th><th>Shoulder</th><th>Sleeve</th><th>Length</th><th>Waist</th><th></th></tr>
         </thead>
         <tbody id="chart-body"><!-- filled by JS --></tbody>
       </table>
     </div>
-    <p class="hint" style="margin-top:12px">Tip: clicking <b>“Use this size”</b> pre-fills the order form below so you can fine-tune from there.</p>
+    <p class="hint" style="margin-top:12px" id="chart-note">Tip: clicking <b>“Use this size”</b> pre-fills the order form below so you can fine-tune from there.</p>
   </div>
 </section>
 
@@ -559,11 +564,15 @@
       <!-- STYLE -->
       <fieldset>
         <legend>1 · Your jacket</legend>
-        <p class="legend-sub">Choose the cut and materials. Unsure? Leave defaults — we'll advise.</p>
+        <p class="legend-sub">Choose who it's for first — styles, sizes and the measuring guide adapt to your pick. Unsure on materials? Leave defaults, we'll advise.</p>
+        <div class="field" style="margin-bottom:20px">
+          <label>Who is it for?</label>
+          <div class="gender-toggle gender-pills" role="group" aria-label="Who is the jacket for" style="align-self:flex-start"></div>
+        </div>
         <div class="field-grid">
           <div class="field">
             <label for="style">Style</label>
-            <select id="style" name="style"><option>Biker / Moto</option><option>Bomber</option><option>Café Racer</option><option>Classic</option><option>Women's</option><option>Other (describe in notes)</option></select>
+            <select id="style" name="style"><!-- options set per gender by JS --></select>
           </div>
           <div class="field">
             <label for="leather">Leather type</label>
@@ -703,17 +712,99 @@
 
 <!-- ===================== JAVASCRIPT ===================== -->
 <script>
-/* ---------- Size chart data (inches) ---------- */
-const CHART = [
-  { size:"S",   chest:38, shoulder:17.5, sleeve:24.5, length:26, waist:32 },
-  { size:"M",   chest:40, shoulder:18,   sleeve:25,   length:27, waist:34 },
-  { size:"L",   chest:43, shoulder:18.75,sleeve:25.5, length:28, waist:38 },
-  { size:"XL",  chest:46, shoulder:19.5, sleeve:26,   length:29, waist:42 },
-  { size:"XXL", chest:49, shoulder:20.25,sleeve:26.5, length:30, waist:46 }
-];
+/* ---------- Gender-specific sizing data (inches) ----------
+   Charts follow standard US apparel measurement conventions:
+   men's by alpha size, women's by alpha size (US 0–16 range),
+   kids by age band. */
+const GENDERS = ["Men", "Women", "Kids"];
+let GENDER = "Men";
+
+const CHARTS = {
+  "Men": [
+    { size:"S",   chest:38, shoulder:17.5, sleeve:24.5, length:26, waist:32 },
+    { size:"M",   chest:40, shoulder:18,   sleeve:25,   length:27, waist:34 },
+    { size:"L",   chest:43, shoulder:18.75,sleeve:25.5, length:28, waist:38 },
+    { size:"XL",  chest:46, shoulder:19.5, sleeve:26,   length:29, waist:42 },
+    { size:"XXL", chest:49, shoulder:20.25,sleeve:26.5, length:30, waist:46 }
+  ],
+  "Women": [
+    { size:"XS", chest:33, shoulder:14.5, sleeve:22.5, length:21.5, waist:26 },
+    { size:"S",  chest:35, shoulder:15,   sleeve:23,   length:22,   waist:28 },
+    { size:"M",  chest:37, shoulder:15.5, sleeve:23.5, length:22.5, waist:30 },
+    { size:"L",  chest:40, shoulder:16,   sleeve:24,   length:23,   waist:33 },
+    { size:"XL", chest:43, shoulder:16.5, sleeve:24.5, length:23.5, waist:36 }
+  ],
+  "Kids": [
+    { size:"4-5Y",   chest:23, shoulder:10.5, sleeve:14.5, length:16,   waist:22 },
+    { size:"6-7Y",   chest:25, shoulder:11.5, sleeve:16.5, length:17.5, waist:23 },
+    { size:"8-9Y",   chest:27, shoulder:12.5, sleeve:18.5, length:19,   waist:24.5 },
+    { size:"10-11Y", chest:29, shoulder:13.5, sleeve:20.5, length:20.5, waist:26 },
+    { size:"12-13Y", chest:31, shoulder:14.5, sleeve:22,   length:22,   waist:27.5 }
+  ]
+};
+
+/* Style menus per gender */
+const STYLES = {
+  "Men":   ["Biker / Moto", "Bomber", "Café Racer", "Classic", "Aviator / Shearling", "Suede Trucker", "Other (describe in notes)"],
+  "Women": ["Moto", "Cropped Moto", "Biker", "Classic", "Fringe Western", "Bomber", "Other (describe in notes)"],
+  "Kids":  ["Mini Biker", "Mini Moto", "Bomber", "Racer", "Other (describe in notes)"]
+};
+
+/* Measurement placeholders + sanity ranges per gender (inches):
+   [placeholder, min, max] */
+const MEASURE_CFG = {
+  "Men":   { chest:[40,24,70], shoulder:[18,12,30],   sleeve:[25,15,40],   length:[27,18,40],   waist:[34,20,70], bicep:[14,8,30], neck:[16,10,26] },
+  "Women": { chest:[36,22,65], shoulder:[15.5,10,26], sleeve:[23.5,13,36], length:[22.5,13,36], waist:[30,18,60], bicep:[12,6,26], neck:[14,8,22] },
+  "Kids":  { chest:[27,16,40], shoulder:[12.5,6,20],  sleeve:[18,7,30],    length:[19,9,30],    waist:[24,13,42], bicep:[9,4,18],  neck:[12,6,18] }
+};
+
+const CHART_NOTES = {
+  "Men":   `Tip: clicking <b>“Use this size”</b> pre-fills the order form below so you can fine-tune from there.`,
+  "Women": `Chart follows US women's sizing (XS ≈ 0–2 through XL ≈ 16). Clicking <b>“Use this size”</b> pre-fills the form.`,
+  "Kids":  `Kids sizes are by age and include standard growing room — between ages? Size up. Clicking <b>“Use this size”</b> pre-fills the form.`
+};
+
 let UNIT = "in";
 const toCm = v => Math.round(v * 2.54 * 10) / 10;
 const disp = v => UNIT === "in" ? v : toCm(v);
+
+/* ---------- Gender toggle (syncs all pill groups) ---------- */
+function setGender(g){
+  GENDER = g;
+  document.querySelectorAll(".gender-pills").forEach(group => {
+    group.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.g === g));
+  });
+  // style menu for this gender
+  const style = document.getElementById("style");
+  const prev = style.value;
+  style.innerHTML = STYLES[g].map(s => `<option>${s}</option>`).join("");
+  if (STYLES[g].includes(prev)) style.value = prev;
+  // chart + labels
+  document.getElementById("chart-size-th").textContent = g === "Kids" ? "Age" : "Size";
+  document.getElementById("chart-gender-word").textContent = g === "Kids" ? "kids'" : g.toLowerCase() + "'s";
+  document.getElementById("chart-note").innerHTML = CHART_NOTES[g];
+  applyMeasureCfg();
+  renderChart();
+}
+function renderGenderPills(){
+  document.querySelectorAll(".gender-pills").forEach(group => {
+    group.innerHTML = GENDERS.map(g =>
+      `<button type="button" data-g="${g}" class="${g===GENDER?"active":""}" onclick="setGender('${g}')">${g}</button>`).join("");
+  });
+}
+
+/* ---------- Per-gender placeholders + validation ranges ---------- */
+function applyMeasureCfg(){
+  const cfg = MEASURE_CFG[GENDER];
+  Object.keys(cfg).forEach(k => {
+    const inp = document.getElementById("m-" + k);
+    if(!inp) return;
+    const [ph, mn, mx] = cfg[k];
+    inp.placeholder = "e.g. " + disp(ph);
+    inp.min = disp(mn);
+    inp.max = disp(mx);
+  });
+}
 
 /* ---------- Unit toggle ---------- */
 function setUnit(u){
@@ -730,14 +821,15 @@ function setUnit(u){
     }
   });
   prevUnit = u;
+  applyMeasureCfg();
   renderChart();
 }
 let prevUnit = "in";
 
-/* ---------- Render size chart ---------- */
+/* ---------- Render size chart (current gender) ---------- */
 function renderChart(){
   const u = UNIT;
-  document.getElementById("chart-body").innerHTML = CHART.map(r => `
+  document.getElementById("chart-body").innerHTML = CHARTS[GENDER].map(r => `
     <tr>
       <td>${r.size}</td>
       <td>${disp(r.chest)} ${u}</td>
@@ -751,7 +843,7 @@ function renderChart(){
 
 /* ---------- Pre-fill form from standard size ---------- */
 function useSize(size){
-  const r = CHART.find(x => x.size === size);
+  const r = CHARTS[GENDER].find(x => x.size === size);
   if(!r) return;
   document.getElementById("m-chest").value    = disp(r.chest);
   document.getElementById("m-shoulder").value = disp(r.shoulder);
@@ -760,7 +852,7 @@ function useSize(size){
   document.getElementById("m-waist").value    = disp(r.waist);
   document.getElementById("consult").checked  = false;
   document.getElementById("order").scrollIntoView({behavior:"smooth"});
-  flash(`Loaded standard size ${size} — adjust any number to fine-tune.`);
+  flash(`Loaded ${GENDER.toLowerCase()} size ${size} — adjust any number to fine-tune.`);
 }
 
 /* ---------- Tiny flash message ---------- */
@@ -826,6 +918,7 @@ function buildSummary(consult){
   lines.push("====================================");
   lines.push("");
   lines.push("JACKET");
+  lines.push(`  For:       ${GENDER}`);
   lines.push(`  Style:     ${f.style.value}`);
   lines.push(`  Leather:   ${f.leather.value}`);
   lines.push(`  Color:     ${f.color.value}`);
@@ -891,7 +984,8 @@ function editAgain(){
 })();
 
 /* ---------- Init ---------- */
-renderChart();
+renderGenderPills();
+setGender("Men");
 </script>
 </body>
 </html>

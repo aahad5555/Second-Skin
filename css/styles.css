@@ -196,6 +196,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.05; let
 
 /* ---------- Collections (3 panels) ---------- */
 .collections { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; }
+.collections.four { grid-template-columns: repeat(4,1fr); }
+.collections.four .collection-card { min-height: 56vh; }
 .collection-card {
   position: relative; min-height: 70vh; overflow: hidden; display: flex; align-items: flex-end;
 }
@@ -393,11 +395,17 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.05; let
   .editorial { grid-template-columns: 1fr; }
   .ugc { grid-template-columns: repeat(3,1fr); }
 }
+@media (max-width: 1024px) {
+  .collections.four { grid-template-columns: 1fr 1fr; }
+  .collections.four .collection-card { min-height: 44vh; }
+}
 @media (max-width: 860px) {
   .nav-links, .nav-actions .desktop-only { display: none; }
   .burger { display: flex; }
   .collections { grid-template-columns: 1fr; }
+  .collections.four { grid-template-columns: 1fr 1fr; }
   .collection-card { min-height: 56vh; }
+  .collections.four .collection-card { min-height: 38vh; }
   .split { grid-template-columns: 1fr; }
   .reassure { grid-template-columns: 1fr; gap: 40px; }
   .footer-cols { grid-template-columns: 1fr 1fr; }

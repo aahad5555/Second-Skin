@@ -34,22 +34,32 @@
     function renderPDP() {
       document.title = `${p.name} — Second Skin`;
       const gallery = p.gallery.map((src,i) => `<img src="${src}" alt="${p.name} view ${i+1}" loading="lazy">`).join("");
+      const sizeList = sizesFor(p);
+      const oneSize = sizeList.length === 1;
+      const sizeGuide = p.section === "Accessories" ? "" :
+        `<a href="custom.html#measure" class="link-underline" style="font-size:11px;">Size Guide &amp; How To Measure</a>`;
+      const sizeLabel = p.section === "Kids" ? "Select Age" : oneSize ? "Sizing" : "Select Size";
+      const details = p.section === "Accessories"
+        ? `Full-grain ${p.color.toLowerCase()} leather, hand-cut, hand-finished edges, solid hardware. Made by the same Sialkot workshop as our jackets. Imported.`
+        : p.section === "Kids"
+        ? `Soft, lightweight lambskin in ${p.color.toLowerCase()}. Smooth lining, low-profile snag-safe hardware, and a cut with growing room built in. Sewn by a single maker. Imported.`
+        : `100% full-grain ${p.color.toLowerCase()} leather. Cupro lining. YKK Excella hardware. Cut and sewn by a single maker. Imported.`;
       document.getElementById("pdp-root").innerHTML = `
       <div class="breadcrumb" style="padding:24px var(--pad) 0;">
-        <a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <a href="shop.html?cat=${encodeURIComponent(p.category)}">${p.category}</a> / <span>${p.name}</span>
+        <a href="index.html">Home</a> / <a href="shop.html?g=${encodeURIComponent(p.section)}">${p.section}</a> / <a href="shop.html?g=${encodeURIComponent(p.section)}&cat=${encodeURIComponent(p.category)}">${p.category}</a> / <span>${p.name}</span>
       </div>
       <div class="pdp">
         <div class="pdp-gallery">${gallery}</div>
         <div class="pdp-info">
-          <div class="cat">${p.category} · ${p.color}</div>
+          <div class="cat">${p.section} · ${p.category} · ${p.color}</div>
           <h1>${p.name}</h1>
           <div class="pdp-price">${formatPrice(p.price)}</div>
           <div class="pdp-rating">Genuine leather · Handcrafted in Sialkot · Ready-to-wear</div>
           <p class="pdp-desc">${p.desc}</p>
           <p class="model-note">${p.model}</p>
 
-          <div class="opt-label"><span>Select Size</span><a href="custom.html#measure" class="link-underline" style="font-size:11px;">Size Guide &amp; How To Measure</a></div>
-          <div class="sizes" id="sizes">${SIZES.map(s => `<button onclick="pickSize('${s}',this)">${s}</button>`).join("")}</div>
+          <div class="opt-label"><span>${sizeLabel}</span>${sizeGuide}</div>
+          <div class="sizes" id="sizes">${sizeList.map(s => `<button onclick="pickSize('${s}',this)">${s}</button>`).join("")}</div>
 
           <div class="pdp-actions">
             <button class="btn btn-primary" id="add-btn" onclick="addPDP()">Add to Bag — ${formatPrice(p.price)}</button>
@@ -64,7 +74,7 @@
           <div class="pdp-accordion">
             <div class="acc-item">
               <button class="acc-head" onclick="toggleAcc(this)">Details &amp; Materials <span>+</span></button>
-              <div class="acc-body"><p>100% full-grain ${p.color.toLowerCase()} leather. Cupro lining. YKK Excella hardware. Cut and sewn by a single maker. Imported.</p></div>
+              <div class="acc-body"><p>${details}</p></div>
             </div>
             <div class="acc-item">
               <button class="acc-head" onclick="toggleAcc(this)">Shipping <span>+</span></button>
@@ -98,7 +108,13 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       renderPDP();
-      const related = PRODUCTS.filter(x => x.id !== p.id && x.gender === p.gender).slice(0, 5);
+      // One-size items: pre-select so Add to Bag just works
+      const sl = sizesFor(p);
+      if (sl.length === 1) {
+        const btn = document.querySelector("#sizes button");
+        if (btn) pickSize(sl[0], btn);
+      }
+      const related = PRODUCTS.filter(x => x.id !== p.id && x.section === p.section).slice(0, 5);
       document.getElementById("related-rail").innerHTML = related.map(productCardHTML).join("");
       initReveal();
     });
